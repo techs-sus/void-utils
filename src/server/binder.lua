@@ -1,4 +1,8 @@
+-- This is a server sided input library for void.
+-- This library assists with input issues on void.
+
 local RunService = game:GetService("RunService")
+assert(RunService:IsServer(), "Please run binder on the server. No reason to use it on the client!")
 local api = {}
 api.__index = api
 
