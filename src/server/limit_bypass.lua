@@ -1,4 +1,5 @@
 -- A library for fixing ImageLabels and Parts having excessive limits.
+-- !WARN! This library ONLY resets the limits to 1000 a second.
 
 local oldInstance = Instance
 Instance = {}
