@@ -25,7 +25,9 @@ function api:bindKey(player: Player, keycode: Enum.KeyCode)
 			v:Destroy()
 		end
 	end
-	self._inputs[player] = {}
+	if self._inputs[player] == nil then
+		self._inputs[player] = {}
+	end
 	local isKeyDown = false
 	local timeKeyDown = 0
 	local input = Instance.new("ProximityPrompt")
