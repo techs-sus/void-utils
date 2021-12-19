@@ -7,7 +7,10 @@ local api = {}
 api.__index = api
 
 type AmongUsInputReader = {
-	bindKey: (player: Player, keycode: Enum.KeyCode) -> {
+	_inputs: {},
+	_onKeyDown: BindableEvent,
+	_onKeyUp: BindableEvent,
+	bindKey: (self: any, player: Player, keycode: Enum.KeyCode) -> {
 		keyEvents: {onKeyDown: RBXScriptSignal, onKeyUp: RBXScriptSignal},
 		onDestroy: () -> nil,
 		timeKeyDown: number,
@@ -15,7 +18,7 @@ type AmongUsInputReader = {
 		destroyed: boolean,
 		_proximityPrompt: ProximityPrompt
 	},
-	unbindKey: (player: Player, keycode: Enum.KeyCode) -> nil
+	unbindKey: (self: any, player: Player, keycode: Enum.KeyCode) -> nil
 }
 
 function api.new(): AmongUsInputReader
