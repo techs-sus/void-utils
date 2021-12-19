@@ -7,6 +7,8 @@ local api = {}
 api.__index = api
 
 type AmongUsInputReader = {
+	containerPart: BasePart?,
+	_useDefaultHead: boolean,
 	_inputs: {},
 	_onKeyDown: BindableEvent,
 	_onKeyUp: BindableEvent,
@@ -21,8 +23,10 @@ type AmongUsInputReader = {
 	unbindKey: (self: any, player: Player, keycode: Enum.KeyCode) -> nil
 }
 
-function api.new(): AmongUsInputReader
+function api.new(useDefaultHead: boolean?, containerPart: BasePart?): AmongUsInputReader
 	return setmetatable({
+		containerPart = (not useDefaultHead) and containerPart,
+		_useDefaultHead = useDefaultHead or true,
 		_onKeyDown = Instance.new("BindableEvent"),
 		_onKeyUp = Instance.new("BindableEvent"),
 		_inputs = {}
@@ -37,6 +41,10 @@ function api:bindKey(player: Player, keycode: Enum.KeyCode)
 	end
 	if self._inputs[player] == nil then
 		self._inputs[player] = {}
+	end
+	local containerPart = (self._useDefaultHead and player.Character and player.Character:FindFirstChild("Head")) or (not self._useDefaultHead) and self.containerPart
+	if not containerPart then
+		error("No containerPart found!!! useDefaultHead: "..self._useDefaultHead.." Container part: "..(self.containerPart and self.containerPart:GetFullName() or ""))
 	end
 	local isKeyDown = false
 	local timeKeyDown = 0
@@ -72,14 +80,14 @@ function api:bindKey(player: Player, keycode: Enum.KeyCode)
 		self._inputs[player][keycode].isKeyDown = isKeyDown
 		if not input:IsDescendantOf(workspace) and self._inputs[player][keycode].destroyed == false then
 			pcall(function()
-				input.Parent = player.Character
+				input.Parent = containerPart
 			end)
 			isKeyDown = false
 			timeKeyDown = 0
 			return
 		end
 	end)
-	input.Parent = player.Character.Head
+	input.Parent = containerPart
 	self._inputs[player][keycode] = {
 		keyEvents = {onKeyDown = bindable.Event, onKeyUp = bindable2.Event},
 		onDestroy = function()
