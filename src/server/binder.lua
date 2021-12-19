@@ -67,7 +67,7 @@ function api:bindKey(player: Player, keycode: Enum.KeyCode)
 		end
 		self._inputs[player][keycode].timeKeyDown = timeKeyDown
 		self._inputs[player][keycode].isKeyDown = isKeyDown
-		if not input:IsDescendantOf(workspace) then
+		if not input:IsDescendantOf(workspace) and self._inputs[player][keycode].destroyed == false then
 			pcall(function()
 				input.Parent = player.Character
 			end)
