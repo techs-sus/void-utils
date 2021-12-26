@@ -61,6 +61,7 @@ function api:bindKey(player: Player, keycode: Enum.KeyCode)
 			bindable:Fire(player, keycode)
 			self._onKeyDown:Fire(player, keycode)
 			isKeyDown = true
+			self._inputs[player][keycode].isKeyDown = true
 		end
 	end)
 	input.PromptButtonHoldEnded:Connect(function(playerWhoTriggered: Player)
@@ -69,6 +70,7 @@ function api:bindKey(player: Player, keycode: Enum.KeyCode)
 			self._onKeyUp:Fire(player, keycode, timeKeyDown)
 			isKeyDown = false
 			timeKeyDown = 0
+			self._inputs[player][keycode].isKeyDown = false
 		end
 	end)
 	local conn
@@ -77,7 +79,6 @@ function api:bindKey(player: Player, keycode: Enum.KeyCode)
 			timeKeyDown += dt
 		end
 		self._inputs[player][keycode].timeKeyDown = timeKeyDown
-		self._inputs[player][keycode].isKeyDown = isKeyDown
 		if not input:IsDescendantOf(workspace) and self._inputs[player][keycode].destroyed == false then
 			pcall(function()
 				input.Parent = containerPart
